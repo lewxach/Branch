@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch - Settings</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Branch - Settings</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/uploadform">Upload</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+    <main>
+        <form action="/settings" method="post">
+            <div>
+                <label for="nickname">Nickname:</label>
+                <input type="text" name="nickname" value="{{ user.nickname }}" required>
+            </div>
+            <div>
+                <label for="bio">Bio:</label>
+                <textarea name="bio">{{ user.bio }}</textarea>
+            </div>
+            <div>
+                <label for="profile_url">Profile URL:</label>
+                <input type="url" name="profile_url" value="{{ user.profile_url }}">
+            </div>
+            <button type="submit">Save Changes</button>
+        </form>
+    </main>
+</body>
+</html>

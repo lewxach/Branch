@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch - Feed</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script>
+        async function likeVideo(videoId) {
+            const response = await fetch('/like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ video_id: videoId })
+            });
+            if (response.ok) {
+                const likesSpan = document.getElementById(`likes-${videoId}`);
+                likesSpan.innerText = parseInt(likesSpan.innerText) + 1;
+            } else {
+                const data = await response.json();
+                alert(data.message);
+            }
+        }
+
+        async function dislikeVideo(videoId) {
+            const response = await fetch('/dislike', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ video_id: videoId })
+            });
+            if (response.ok) {
+                const dislikesSpan = document.getElementById(`dislikes-${videoId}`);
+                dislikesSpan.innerText = parseInt(dislikesSpan.innerText) + 1;
+            } else {
+                const data = await response.json();
+                alert(data.message);
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        .video-feed {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .video-item {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .video-item video {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 9/16; /* Adjust for phone videos */
+        }
+
+        .video-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .video-actions button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+
+        .video-actions button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Branch - Feed</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/uploadform">Upload</a>
+            <a href="/settings">Settings</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+    <div class="video-feed">
+        {% for video in videos %}
+        <div class="video-item">
+            <video controls>
+                <source src="{{ video['url'] }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="video-actions">
+                <button onclick="likeVideo('{{ video['id'] }}')">Like</button>
+                <span id="likes-{{ video['id'] }}">{{ video['likes'] }}</span>
+                <button onclick="dislikeVideo('{{ video['id'] }}')">Dislike</button>
+                <span id="dislikes-{{ video['id'] }}">{{ video['dislikes'] }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch - Profile</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Branch</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/uploadform">Upload Video</a>
+            <a href="/feed">Feed</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Profile</h2>
+        <form action="/profile/update" method="post">
+            <label for="nickname">Nickname:</label>
+            <input type="text" name="nickname" value="{{ user.nickname }}">
+            <label for="bio">Bio:</label>
+            <textarea name="bio">{{ user.bio }}</textarea>
+            <label for="profile_url">Profile URL:</label>
+            <input type="text" name="profile_url" value="{{ user.profile_url }}">
+            <button type="submit">Update Profile</button>
+        </form>
+        <h3>Your Videos</h3>
+        <div class="video-feed">
+            {% for video in user_videos %}
+                <div class="video-item">
+                    <video src="{{ video.url }}" controls></video>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>
